@@ -186,108 +186,51 @@ const songs = [
     },
 
 ]
-/*PLAYLIST*/
+function createSongItem(songs, startId, endId, songList) {
+    songs.forEach((song) => {
+        const li = document.createElement('li');
+        li.classList.add('songItem');
+
+        if (parseInt(song.id) >= startId && parseInt(song.id) <= endId) {
+            const div = document.createElement('div');
+            div.classList.add('img_play');
+
+            const img = document.createElement('img');
+            img.src = song.poster;
+
+            const playIcon = document.createElement('i');
+            playIcon.classList.add('bi', 'playListPlay', 'bi-play-circle-fill');
+            playIcon.id = song.id;
+
+            div.appendChild(img);
+            div.appendChild(playIcon);
+
+            const h5 = document.createElement('h5');
+            h5.innerHTML = `${song.songName} <br> <div class="subtitle">${song.artist}</div>`;
+
+            li.appendChild(div);
+            li.appendChild(h5);
+            songList.appendChild(li);
+
+            playIcon.addEventListener('click', () => {
+                music.src = song.audio;
+                music.play();
+                wave.classList.add('active2');
+                masterPlay.classList.remove('bi-play-fill');
+                masterPlay.classList.add('bi-pause-fill');
+            });
+        }
+    });
+}
+
 const songList = document.querySelector('.song-list');
-
-songs.forEach((songs)=> {
-    const li = document.createElement('li');
-    li.classList.add('songItem');
-
-    if (parseInt(songs.id) >= 1 && parseInt(songs.id) <= 6) {
-        const img = document.createElement('img');
-        img.src = songs.poster;
-
-        const span = document.createElement('span');
-        span.innerHTML = `${songs.id}`;    
-
-        const h5 = document.createElement('h5');
-        h5.innerHTML = `${songs.songName} <br> <div class="subtitle">${songs.artist}</div>`;
-
-        const playIcon = document.createElement('i');
-        playIcon.classList.add('bi', 'playListPlay', 'bi-play-circle-fill');
-        playIcon.id = songs.id;
-
-        li.appendChild(span);
-        li.appendChild(img);
-        li.appendChild(h5);
-        li.appendChild(playIcon);
-        songList.appendChild(li);
-
-        li.addEventListener('click', () => {
-            music.src = songs.audio;
-            music.play();
-        })
-    }
-})
-
-/*V-POP*/
 const songList1 = document.querySelector('.song-list-1');
-
-songs.forEach((songs) => {
-    const li = document.createElement('li');
-    li.classList.add('songItem');
-    
-    if (parseInt(songs.id) >= 7 && parseInt(songs.id) <= 18) {
-        const div = document.createElement('div');
-        div.classList.add('img_play');
-
-        const img = document.createElement('img');
-        img.src = songs.poster;
-
-        const playIcon = document.createElement('i');
-        playIcon.classList.add('bi', 'playListPlay', 'bi-play-circle-fill');
-        playIcon.id = songs.id;
-        
-        div.appendChild(img);
-        div.appendChild(playIcon);
-
-        const h5 = document.createElement('h5');
-        h5.innerHTML = `${songs.songName} <br> <div class="subtitle">${songs.artist}</div>`;
-
-        li.appendChild(div);
-        li.appendChild(h5);
-        songList1.appendChild(li);
-
-        li.addEventListener('click', () => {
-            music.src = songs.audio;
-            music.play();
-        })
-    }
-})
-/*US UKS */
 const songList2 = document.querySelector('.song-list-2');
 
-songs.forEach((songs) => {
-    const li = document.createElement('li');
-    li.classList.add('songItem');
-    
-    if (parseInt(songs.id) >= 19) {
-        const div = document.createElement('div');
-        div.classList.add('img_play');
+createSongItem(songs, 1, 6, songList);
+createSongItem(songs, 7, 18, songList1);
+createSongItem(songs, 19, Number.MAX_SAFE_INTEGER, songList2);
 
-        const img = document.createElement('img');
-        img.src = songs.poster;
-
-        const playIcon = document.createElement('i');
-        playIcon.classList.add('bi', 'playListPlay', 'bi-play-circle-fill');
-        playIcon.id = songs.id;
-        
-        div.appendChild(img);
-        div.appendChild(playIcon);
-
-        const h5 = document.createElement('h5');
-        h5.innerHTML = `${songs.songName} <br> <div class="subtitle">${songs.artist}</div>`;
-
-        li.appendChild(div);
-        li.appendChild(h5);
-        songList2.appendChild(li);
-
-        li.addEventListener('click', () => {
-            music.src = songs.audio;
-            music.play();
-        })
-    }
-})
 /*MASTER PLAY */
 let masterPlay = document.getElementById('masterPlay');
 let wave = document.getElementsByClassName('wave')[0];
@@ -304,6 +247,41 @@ masterPlay.addEventListener('click',()=>{
         masterPlay.classList.remove('bi-pause-fill');
         wave.classList.remove('active2');
     }
+})
+music.addEventListener('ended', () => {
+    masterPlay.classList.add('bi-play-fill');
+    masterPlay.classList.remove('bi-pause-fill');
+    wave.classList.remove('active2');
+});
+/*NEXT SONG */
+let nextSong = document.getElementById("next");
+let backSong = document.getElementById("back");
+
+backSong.addEventListener('click', () => {
+    index--;
+    if (index < 1) {
+        index = Array.from(document.getElementsByClassName('songItem')).length;
+    }
+    music.src = songs[index - 1].audio;
+    poster_master_play.src = songs[index - 1].poster;
+    music.play();
+    title.innerHTML = `${songs[index - 1].songName} <br> <div class="subtitle">${songs[index - 1].artist}</div>`;
+    masterPlay.classList.remove('bi-play-fill');
+    masterPlay.classList.add('bi-pause-fill');
+    wave.classList.add('active2');
+})
+nextSong.addEventListener('click', () => {
+    index++;
+    if (index > Array.from(document.getElementsByClassName('songItem')).length) {
+        index = 1;
+    }
+    music.src = songs[index - 1].audio;
+    poster_master_play.src = songs[index - 1].poster;
+    music.play();
+    title.innerHTML = `${songs[index - 1].songName} <br> <div class="subtitle">${songs[index - 1].artist}</div>`;
+    masterPlay.classList.remove('bi-play-fill');
+    masterPlay.classList.add('bi-pause-fill');
+    wave.classList.add('active2');
 })
 
 /*TIME SONG */
@@ -337,7 +315,7 @@ music.addEventListener('timeupdate',()=>{
     bar2.style.width = `${seekbar}%`;
     dot.style.left = `${seekbar}%`;
 })
-
+    
 seek.addEventListener('change', ()=>{
     music.currentTime = seek.value * music.duration/100;
 })

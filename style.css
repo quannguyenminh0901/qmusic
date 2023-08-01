@@ -495,11 +495,12 @@ footer .master_play .icon .bi{
  outline: none;
 }
 footer .master_play .icon .bi:nth-child(2){
-    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    padding: 1px 4px 0px 6px;
+    padding: 1px 4px;
     margin: 0px 5px;
-    transition: .3s linear;
+}
+footer .master_play .icon .bi:nth-child(2):hover{
+    border: 1px solid rgb(168, 168, 168);
 }
 footer .master_play span {
     color: #fff;
@@ -508,7 +509,7 @@ footer .master_play span {
     font-weight: 400;
 }
 footer .master_play #currentStart{
-    margin: 0px 0px 0px 20px;
+    margin: 0px 0px 0px 10px;
 }
 
 footer .master_play .bar {
